@@ -8,12 +8,19 @@
         <p v-if="titleFeedback" class="red-text">{{titleFeedback}}</p>
       </div>
 
-      <div v-for="(number, index) in numbers" v-bind:key="index">
+      <!-- <div v-for="(number, index) in numbers" v-bind:key="index">
         <label for="number">Numbers:</label>
         <input type="text" name="number" v-model.number.trim="numbers[index]">
       </div>
       <div class="field add-number">
-        <label for="add-number">Add a Number:</label>
+        <label for="add-number">Numbers:</label>
+      </div> -->
+      <div>
+        <ul class="numbers">
+          <li v-for="(num, index) in numbers" v-bind:key="index">
+            <span class="chip">{{num}}</span>
+          </li>
+        </ul>
       </div>
 
       <div class="field min-number input-field">
@@ -97,28 +104,31 @@ export default {
       } else {
         this.titleFeedback = null;
         this.numberFeedback = null;
-      console.log(this.title);
-      console.log(this.selectedNumber);
-      console.log(this.min);
-      console.log(this.max);
-      console.log(Math.floor(Math.random() *(this.max - this.min + 1)))
-      console.log(this.selectedNumber);
+      console.log("title: " + this.title);
+      console.log("selected number: " + this.selectedNumber);
+      console.log("min number: " + this.min);
+      console.log("max number: " + this.max);
+      // console.log(Math.floor(Math.random() *(parseInt(this.max)) - parseInt(this.min + 1)))
+    
       for(let i = 0; i < this.selectedNumber; i++) {
         if(this.min >= this.max) {
           this.minFeedback = 'You minimum number cannot be larger than your maximum number'
         } else if(this.max <= this.min) {
           this.maxFeedback = 'You maximum number cannot be larger than your maximum number'
-        } else if(this.min === null) {
+        } else if(this.min == null) {
           this.minFeedback = 'Please provide a minimum value'
-        } else if(this.max === null) {
+        } else if(this.max == null) {
           this.maxFeedback = 'Please provide a maximum value'
-        } else if(this.max === null && this.min === null) {
+        } else if(this.max == null && this.min === null) {
           this.maxFeedback = 'Please provide a maximum value'
           this.minFeedback = 'Please provide a minimum value'
         } else {
-        let generatedNumber = Math.floor(Math.random() *(this.max - this.min + 1));
+          console.log("max again: " + this.max)
+        let generatedNumber = parseInt(Math.floor(Math.random() *(this.max - this.min + 1)) + this.min);
         console.log(`gen number: ${i} is ${generatedNumber}`);
         this.numbers.push(generatedNumber);
+        this.minFeedback = null;
+        this.maxFeedback = null;
         console.log(this.numbers);
         // this.numbers.push(this.another)
         // console.log([i])
