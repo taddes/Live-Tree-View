@@ -6,7 +6,7 @@
         <span class="nav-title">{{title}}</span>
       </router-link>
       <a href="" class="btn-floating btn-large teal darken-4 halfway-fab">
-        <router-link v-bind:to="{ name: 'AddBranch' }">
+        <router-link v-bind:to="{ name: 'AddFactory' }">
           <i class="material-icons">add</i>
         </router-link>
       </a>
