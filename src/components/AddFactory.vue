@@ -5,8 +5,31 @@
       <div class="field title input-field">
         <label for="title">Factory Title:</label>
         <input type="text" name="title" v-model.trim="title">
+        <p v-if="titleFeedback" class="red-text">{{titleFeedback}}</p>
       </div>
-      <div class=" add-number">
+
+      <div v-for="(number, index) in numbers" v-bind:key="index">
+        <label for="number">Numbers:</label>
+        <input type="text" name="number" v-model.number.trim="numbers[index]">
+      </div>
+      <div class="field add-number">
+        <label for="add-number">Add a Number:</label>
+      </div>
+
+      <div class="field min-number input-field">
+        <label for="min">Minimum number:</label>
+        <input type="text" name="min" v-model.number.trim="min">
+        <p v-if="minFeedback" class="red-text">{{minFeedback}}</p>
+      </div>
+      <div class="field max-number input-field">
+        <label for="max">Maximum number:</label>
+        <input type="text" name="max" v-model.number.trim="max">
+        <p v-if="maxFeedback" class="red-text">{{maxFeedback}}</p>
+      </div>
+
+
+
+      <div class="add-number">
         <label for="add-number">Choose how many random numbers you'd like</label>
         <select class="browser-default form-control" name="number" v-model="selectedNumber">
           <option  value="" disabled >Choose how many random numbers you'd like</option>
@@ -14,10 +37,12 @@
             {{ randomNumber.text }}
           </option>
         </select>
-        <span>You selected {{selectedNumber}} random numbers to be generated</span>
+        <p v-if="numberFeedback" class="red-text">{{numberFeedback}}</p>
+        <span v-if="selectedNumber">You selected {{selectedNumber}} random numbers to be generated</span>
       </div>
       <div class="button field center-align">
-        <button class="btn indigo">Add Factory</button>
+        <button class="btn indigo factoryButton">Add Factory</button>
+        <button class="btn indigo numberButton" >Add Number</button>
       </div>
     </form>
   </div>
@@ -31,6 +56,14 @@ export default {
       AddFactoryTitle: 'Add a New Factory!',
       selectedNumber: null,
       title: null,
+      another: null,
+      min: null,
+      max: null,
+      titleFeedback: null,
+      numberFeedback: null,
+      minFeedback: null,
+      maxFeedback: null,
+      numbers: [],
       randomNumbers: [
         {text: '1', value: 1},
         {text: '2', value: 2},
@@ -52,9 +85,61 @@ export default {
   },
   methods: {
     AddFactory(){
+      if(this.title === null) {
+        this.titleFeedback = 'Please enter a valid title'
+        this.numberFeedback = null;
+      } else if (this.selectedNumber === null) {
+        this.titleFeedback = null;
+        this.numberFeedback = 'Please select a number'
+      } else if (this.title === null && this.selectedNumber === null) {
+        this.titleFeedback = 'Please enter a valid title'
+        this.numberFeedback = 'Please select a number'
+      } else {
+        this.titleFeedback = null;
+        this.numberFeedback = null;
       console.log(this.title);
-      console.log(this.selectedNumber)
-    }
+      console.log(this.selectedNumber);
+      console.log(this.min);
+      console.log(this.max);
+      console.log(Math.floor(Math.random() *(this.max - this.min + 1)))
+      console.log(this.selectedNumber);
+      for(let i = 0; i < this.selectedNumber; i++) {
+        if(this.min >= this.max) {
+          this.minFeedback = 'You minimum number cannot be larger than your maximum number'
+        } else if(this.max <= this.min) {
+          this.maxFeedback = 'You maximum number cannot be larger than your maximum number'
+        } else if(this.min === null) {
+          this.minFeedback = 'Please provide a minimum value'
+        } else if(this.max === null) {
+          this.maxFeedback = 'Please provide a maximum value'
+        } else if(this.max === null && this.min === null) {
+          this.maxFeedback = 'Please provide a maximum value'
+          this.minFeedback = 'Please provide a minimum value'
+        } else {
+        let generatedNumber = Math.floor(Math.random() *(this.max - this.min + 1));
+        console.log(`gen number: ${i} is ${generatedNumber}`);
+        this.numbers.push(generatedNumber);
+        console.log(this.numbers);
+        // this.numbers.push(this.another)
+        // console.log([i])
+        // console.log( Math.floor(Math.random() *(this.max - this.min + 1)))
+        }
+      }
+      }
+    },
+    // addNum() {
+    //   if(this.another) {
+    //     console.log(Math.floor(Math.random() *(this.max - this.min + 1)))
+    //     this.numbers.push(this.another)
+    //     this.another = null
+    //     this.feedback = null
+    //   } else {
+    //     this.feedback = 'Please add a number'
+    //   }
+      
+    // }
+
+
   }
 
 }
