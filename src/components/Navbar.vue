@@ -5,7 +5,7 @@
       <router-link v-bind:to="{name: 'Index' }">
         <span class="nav-title">{{title}}</span>
       </router-link>
-      <a href="" class="btn-floating btn-large teal darken-4">
+      <a href="" class="btn-floating btn-large teal darken-4 halfway-fab">
         <router-link v-bind:to="{ name: 'AddBranch' }">
           <i class="material-icons">add</i>
         </router-link>
@@ -31,6 +31,14 @@ export default {
 .navbar nav {
   padding: 0 20px;
 }
+.nav-content {
+  text-align: center;
+  font-family: 'Sunflower', sans-serif;
+}
+.nav-title {
+  font-family: 'Sunflower', sans-serif;
+}
+
 
 
 </style>
