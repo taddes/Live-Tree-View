@@ -3,6 +3,7 @@
     <!-- Outputs discrete card for each factory element -->
     <div class="card" v-for="factory in factories" v-bind:key="factory.id">
       <div class="card-content">
+        <i class="material-icons delete" @click="deleteFactory(factory.id)">delete</i>
         <h2 class="blue-grey-text">{{factory.title}}</h2>
         <ul class="numbers">
           <li v-for="(num, index) in factory.numbers" v-bind:key="index">
@@ -23,9 +24,19 @@ export default {
       factories: [
         {title: 'Taddes', slug: 'taddes', numbers: ['55', '78', '3'], id: '1'},
         {title: 'Jeremy', slug: 'jeremy', numbers: ['568', '8', '47'], id: '2'},
-        {title: 'Sarah', slug: 'sarah', numbers: ['670', '85', '1'], id: '1'},
-        {title: 'Victor', slug: 'victor', numbers: ['2', '78', '40'], id: '2'}
+        {title: 'Sarah', slug: 'sarah', numbers: ['670', '85', '1'], id: '3'},
+        {title: 'Victor', slug: 'victor', numbers: ['2', '78', '40'], id: '4'}
       ]
+    }
+  },
+  methods: {
+    // method to determine if the clicked factory is deleted or not, based
+    // on returned boolean.  If factory.id matches the id in the array, the 
+    // factory not is deleted. If it does not match, it is filtered out
+    deleteFactory(id) {
+      this.factories = this.factories.filter(factory => {
+        return factory.id != id
+      })
     }
   }
 }
@@ -51,6 +62,14 @@ export default {
 }
 .index .numbers li {
   display: inline-block;
+}
+.index .delete {
+  position:absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 1.8em;
 }
 
 </style>
