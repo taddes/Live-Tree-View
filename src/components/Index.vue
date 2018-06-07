@@ -11,8 +11,12 @@
           </li>
         </ul>
       </div>
+      <span class="btn-floating btn-large halfway-fab">
+        <router-link :to="{ name: 'EditFactory', params: {factory_slug: factory.slug} }">
+          <i class="material-icons edit">edit</i>
+        </router-link>
+      </span>
     </div>
-
   </div>
 </template>
 

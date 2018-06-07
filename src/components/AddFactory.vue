@@ -17,6 +17,8 @@
       </div> -->
       <div>
         <ul class="numbers">
+          <label for="num">You randomly generated numbers:</label>
+          <br>
           <li v-for="(num, index) in numbers" v-bind:key="index">
             <span class="chip">{{num}}</span>
           </li>
@@ -173,7 +175,9 @@ export default {
 .add-factory .field {
   margin: 20px auto;
 }
-
+.numbers li {
+  display: inline-block;
+}
 
 </style>
 
