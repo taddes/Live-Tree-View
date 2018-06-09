@@ -59,7 +59,7 @@
       <div>{{$v.selectedNumber}}</div>
       <div class="button field center-align">
         <button :disabled="$v.$invalid" class="btn indigo factoryButton" @click.prevent="addFactory">Add Factory</button>
-        <button :disabled="$v.$invalid" class="btn indigo numberButton" @click.prevent="addToApi">Submit</button>
+        <button :disabled="$v.$invalid" class="btn indigo numberButton" @click.prevent="addToApi"><router-link :to="{ name: 'Index'}">Submit</router-link></button>
       </div>
     </form>
   </div>
@@ -193,7 +193,7 @@ export default {
         numbers: this.numbers
       }
       console.log(newFactory)
-      axios.post('http://localhost:3000/factories', newFactory)
+      axios.post('http://localhost:3000/factories/', newFactory)
       .then((res) => {
         console.log(res);
       })

@@ -27,3 +27,12 @@ Factory.findById(req.params.factoryId, (err, factory) => {
     res.json(factory); 
   });
 };
+
+exports.delete_a_factory = (req, res) => {
+  Factory.remove({_id: req.params.factoryId
+  }, (err, factory) => {
+    if(err)
+    res.send(err);
+    res.json({factory: 'successfully deleted'})
+  })
+}
