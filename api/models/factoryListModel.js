@@ -16,7 +16,7 @@ var FactorySchema = new Schema({
     type: Number,
     required: true
   },
-  number: {
+  selectedNumber: {
     type: Number,
     required: true
   },

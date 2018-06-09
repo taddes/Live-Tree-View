@@ -21,11 +21,13 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'Index',
   data () {
     return {
       factories: [
+        
         {title: 'Taddes', slug: 'taddes', numbers: ['55', '78', '3'], id: '1'},
         {title: 'Jeremy', slug: 'jeremy', numbers: ['568', '8', '47'], id: '2'},
         {title: 'Sarah', slug: 'sarah', numbers: ['670', '85', '1'], id: '3'},

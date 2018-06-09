@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const Factory = require('./api/models/factoryListModel')
 const path = require('path');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+const routes = require('./api/routes/factoryListRoutes')
+// const cors = require('cors');
 
 // Start Express Server
 const app = express();
@@ -11,18 +12,20 @@ const app = express();
 // Define Port
 const PORT = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-  console.log('GET request');
-})
+// app.get('/', (req, res) => {
+//   console.log('GET request');
+// })
 
 // Set public folder, may need to change
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/Factorydb')
 // Body Parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+routes(app);
 
 // Enable Cors
 // app.use(cors());

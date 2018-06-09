@@ -1,7 +1,7 @@
 <template>
   <div class="container add-factory">
     <h2 class="center-align blue-grey-text darken-4">{{AddFactoryTitle}}</h2>
-    <form @submit.prevent="addFactory">
+    <form >
       <div class="field title input-field" v-bind:class="{invalid: $v.title.$error}">
         <label for="title">Factory Title:</label>
         <input type="text" name="title" v-model.trim="title" @input="$v.title.$touch()">
@@ -58,14 +58,15 @@
       </div>
       <div>{{$v.selectedNumber}}</div>
       <div class="button field center-align">
-        <button :disabled="$v.$invalid" class="btn indigo factoryButton">Add Factory</button>
-        <button class="btn indigo numberButton" >Add Number</button>
+        <button :disabled="$v.$invalid" class="btn indigo factoryButton" @click.prevent="addFactory">Add Factory</button>
+        <button :disabled="$v.$invalid" class="btn indigo numberButton" @click.prevent="addToApi">Submit</button>
       </div>
     </form>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import { required, alphaNum, integer, between, numeric } from 'vuelidate/lib/validators'
 export default {
   name: 'AddFactory',
@@ -99,6 +100,13 @@ export default {
         {text: '14', value: 14},
         {text: '15', value: 15},
         ],
+        // factories: {
+        // title:'',
+        // min:'',
+        // max:'',
+        // selectedNumber:'',
+        // numbers:[]
+        // }
     }
   },
   validations: {
@@ -159,9 +167,11 @@ export default {
         let generatedNumber = parseInt(Math.floor(Math.random() *(this.max - this.min + 1)) + this.min);
         console.log(`gen number: ${i} is ${generatedNumber}`);
         this.numbers.push(generatedNumber);
+        this.submitButton = 1;
         this.minFeedback = null;
         this.maxFeedback = null;
         console.log(this.numbers);
+ 
         // this.numbers.push(this.another)
         // console.log([i])
         // console.log( Math.floor(Math.random() *(this.max - this.min + 1)))
@@ -169,6 +179,28 @@ export default {
       }
       }
     },
+    addToApi() {
+      console.log("Im alive")
+
+      // let title = this.title;
+      console.log(this.title)
+      let newFactory = {
+        title: this.title,
+        min: this.min,
+        max: this.max,
+        number: this.number,
+        selectedNumber: this.selectedNumber,
+        numbers: this.numbers
+      }
+      console.log(newFactory)
+      axios.post('http://localhost:3000/factories', newFactory)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+    }
     // addNum() {
     //   if(this.another) {
     //     console.log(Math.floor(Math.random() *(this.max - this.min + 1)))
