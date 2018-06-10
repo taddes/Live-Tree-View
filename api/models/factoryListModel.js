@@ -23,6 +23,10 @@ var FactorySchema = new Schema({
   numbers: {
     type: Array,
     required: true
+  },
+  urlSlug: {
+    type: String,
+    required: true
   }
 });
 

@@ -12,7 +12,7 @@
         </ul>
       </div>
       <span class="btn-floating btn-large halfway-fab">
-        <router-link :to="{ name: 'EditFactory', params: {factory_slug: factory.title} }">
+        <router-link :to="{ name: 'EditFactory', params: {factory_slug: factory._id} }">
           <i class="material-icons edit">edit</i>
         </router-link>
       </span>
@@ -39,13 +39,22 @@ export default {
     // method to determine if the clicked factory is deleted or not, based
     // on returned boolean.  If factory.id matches the id in the array, the 
     // factory not is deleted. If it does not match, it is filtered out
-    deleteFactory(factories, id) {
+    deleteFactory(id) {
       console.log(id)
       // Delete doc from database, using unique id.
       axios.delete('http://localhost:3000/factories/' + id)
-      .then(res => this.factories.splice(index, 1));
+      .then((res) => {
+        console.log("hi!")
+        console.log(id)
+        console.log(this.factories)
+        this.factories = this.factories.filter(factory => {
+           return factory.id != id
+           console.log(factory.id)
       console.log('deleted!')
-      }
+      })
+      })
+    }
+      
       // this.factories = this.factories.filter(factory => {
       //   return factory.id != id
 
@@ -53,10 +62,7 @@ export default {
     
   },
   created() {
-    
-  },
-  mounted() {
-    axios.get('http://localhost:3000/factories')
+        axios.get('http://localhost:3000/factories')
     .then((res) => {
       console.log(res.data);
       this.factories = res.data;
@@ -66,6 +72,19 @@ export default {
     .catch((err) => {
     console.log(err);
     });
+    
+  },
+  mounted() {
+    // axios.get('http://localhost:3000/factories')
+    // .then((res) => {
+    //   console.log(res.data);
+    //   this.factories = res.data;
+    //   console.log(`factories ${this.factories}`)
+
+    // })
+    // .catch((err) => {
+    // console.log(err);
+    // });
 
   }
 }

@@ -67,6 +67,7 @@
 
 <script>
 import axios from 'axios'
+import slugify from 'slugify'
 import { required, alphaNum, integer, between, numeric } from 'vuelidate/lib/validators'
 export default {
   name: 'AddFactory',
@@ -78,6 +79,7 @@ export default {
       another: null,
       min: null,
       max: null,
+      urlSlug: null,
       titleFeedback: null,
       numberFeedback: null,
       minFeedback: null,
@@ -145,8 +147,9 @@ export default {
       console.log("min number: " + this.min);
       console.log("max number: " + this.max);
       // console.log(Math.floor(Math.random() *(parseInt(this.max)) - parseInt(this.min + 1)))
-    
+            this.numbers = []
       for(let i = 0; i < this.selectedNumber; i++) {
+
         if(this.min > this.max) {
           this.minFeedback = 'Your minimum number cannot be larger than your maximum number'
         } else if(this.max < this.min) {
@@ -163,6 +166,8 @@ export default {
           this.maxFeedback = 'Please provide a maximum value'
           this.minFeedback = 'Please provide a minimum value'
         } else {
+          // this.numbers.length = 0;
+          console.log(this.numbers)
           console.log("max again: " + this.max)
         let generatedNumber = parseInt(Math.floor(Math.random() *(this.max - this.min + 1)) + this.min);
         console.log(`gen number: ${i} is ${generatedNumber}`);
@@ -170,6 +175,12 @@ export default {
         this.submitButton = 1;
         this.minFeedback = null;
         this.maxFeedback = null;
+         // create slug for url
+        this.urlSlug = slugify(this.title, {
+          replacement: '-',
+          remove: /[$*_+~.()'"!\-:@`] /g,
+          lower: true
+        })
         console.log(this.numbers);
  
         // this.numbers.push(this.another)
@@ -190,7 +201,8 @@ export default {
         max: this.max,
         number: this.number,
         selectedNumber: this.selectedNumber,
-        numbers: this.numbers
+        numbers: this.numbers,
+        urlSlug: this.urlSlug
       }
       console.log(newFactory)
       axios.post('http://localhost:3000/factories/', newFactory)
