@@ -7,10 +7,14 @@ module.exports = (app) => {
     .get(factoryList.list_all_factories)
     .post(factoryList.create_new_factory);
     // .update(factoryList.update_a_factory)
-    // .delete(factoryList.delete_a_factory)
 
-    app.route('factories/:factoryId')
+
+    app.route('/factories/:factoryId')
     .get(factoryList.read_a_factory)
+    .delete(factoryList.delete_a_factory);
+
+    app.route('/factories/:factoryId')
+    .put(factoryList.update_a_factory);
 
 };
 
