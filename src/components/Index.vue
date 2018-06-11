@@ -26,13 +26,7 @@ export default {
   name: 'Index',
   data () {
     return {
-      factories: [
-        
-        // {title: 'Taddes', slug: 'taddes', numbers: ['55', '78', '3'], id: '1'},
-        // {title: 'Jeremy', slug: 'jeremy', numbers: ['568', '8', '47'], id: '2'},
-        // {title: 'Sarah', slug: 'sarah', numbers: ['670', '85', '1'], id: '3'},
-        // {title: 'Victor', slug: 'victor', numbers: ['2', '78', '40'], id: '4'}
-      ]
+      factories: []
     }
   },
   methods: {
@@ -48,18 +42,20 @@ export default {
         console.log(id)
         console.log(this.factories)
         this.factories = this.factories.filter(factory => {
-           return factory.id != id
+          console.log('trying!')
+          console.log('factory._id' + factory._id)
+          console.log('id' + id)
+          console.log('factory'+ factory)
+           return factory._id != id
            console.log(factory.id)
       console.log('deleted!')
       })
-      })
-    }
-      
-      // this.factories = this.factories.filter(factory => {
-      //   return factory.id != id
+    })
+    .catch((err) => {
+    console.log(err);
+    });
+   }
 
-
-    
   },
   created() {
         axios.get('http://localhost:3000/factories')

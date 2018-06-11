@@ -5,8 +5,8 @@
       <div class="field title input-field" v-bind:class="{invalid: $v.title.$error}">
         <label for="title">Factory Title:</label>
         <input type="text" name="title" v-model.trim="title" @input="$v.title.$touch()">
-        <p v-if="$v.title.$error">{{$v.title.$model}} Invalid. Please enter a valid title. Only numbers and letters with no spaces.</p>
-        <p v-if="titleFeedback" class="red-text">{{titleFeedback}}</p>
+        <span v-if="$v.title.$error" class="red-text">{{$v.title.$model}} Invalid. Please enter a valid title. Only numbers and letters with no spaces.</span>
+        <span v-if="titleFeedback" class="red-text">{{titleFeedback}}</span>
       </div>
       <div>{{$v.title}}</div>
      
@@ -18,28 +18,20 @@
       <div class="field add-number">
         <label for="add-number">Numbers:</label>
       </div> -->
-      <div class="number-display">
-        <ul class="numbers">
-          <label for="num">You randomly generated numbers:</label>
-          <br>
-          <li v-for="(num, index) in numbers" v-bind:key="index">
-            <span class="chip">{{num}}</span>
-          </li>
-        </ul>
-      </div>
+
 
       <div class="field min-number input-field" v-bind:class="{invalid: $v.min.$error}">
         <label for="min">Minimum number:</label>
         <input type="text" name="min" v-model.number.trim="min" @input="$v.min.$touch()">
-        <p v-if="minFeedback" class="red-text">{{minFeedback}}</p>
-        <p v-if="$v.min.$error">{{$v.min.$model}} Invalid. Please enter a vaild number</p>
+        <span v-if="minFeedback" class="red-text">{{minFeedback}}</span>
+        <span v-if="$v.min.$error" class="red-text">{{$v.min.$model}} Invalid. Please enter a vaild number</span>
       </div>
       <div>{{$v.min}}</div>
       <div class="field max-number input-field" v-bind:class="{invalid: $v.max.$error}">
         <label for="max">Maximum number:</label>
         <input type="text" name="max" v-model.number.trim="max"  @input="$v.max.$touch()">
-        <p v-if="maxFeedback" class="red-text">{{maxFeedback}}</p>
-        <p v-if="$v.max.$error">{{$v.max.$model}} Invalid. Please enter a vaild number</p>
+        <span v-if="maxFeedback" class="red-text">{{maxFeedback}}</span>
+        <span v-if="$v.max.$error" class="red-text">{{$v.max.$model}} Invalid. Please enter a vaild number</span>
       </div>
        <div>{{$v.max}}</div>
 
@@ -54,11 +46,22 @@
           </option>
         </select>
         <p v-if="numberFeedback" class="red-text">{{numberFeedback}}</p>
-        <span v-if="selectedNumber">You selected {{selectedNumber}} random numbers to be generated</span>
+        <span v-if="selectedNumber">You've selected {{selectedNumber}} random numbers to be generated</span>
       </div>
       <div>{{$v.selectedNumber}}</div>
+      <br>
+
+      <div class="number-display" v-if="showNums">
+        <label for="numbers">Your randomly generated numbers:</label>
+        <ul class="numbers" >
+          <li v-for="(num, index) in numbers" v-bind:key="index">
+            <span class="chip">{{num}}</span>
+          </li>
+        </ul>
+      </div>
+
       <div class="button field center-align">
-        <button :disabled="$v.$invalid" class="btn indigo factoryButton" @click.prevent="addFactory">Add Factory</button>
+        <button :disabled="$v.$invalid" class="btn indigo factoryButton" @click.prevent="addFactory">Generate Factory</button>
         <button :disabled="$v.$invalid" class="btn indigo numberButton" @click.prevent="addToApi"><router-link :to="{ name: 'Index'}">Submit</router-link></button>
       </div>
     </form>
@@ -80,6 +83,7 @@ export default {
       min: null,
       max: null,
       urlSlug: null,
+      showNums: false,
       titleFeedback: null,
       numberFeedback: null,
       minFeedback: null,
@@ -101,14 +105,7 @@ export default {
         {text: '13', value: 13},
         {text: '14', value: 14},
         {text: '15', value: 15},
-        ],
-        // factories: {
-        // title:'',
-        // min:'',
-        // max:'',
-        // selectedNumber:'',
-        // numbers:[]
-        // }
+        ]
     }
   },
   validations: {
@@ -146,10 +143,10 @@ export default {
       console.log("selected number: " + this.selectedNumber);
       console.log("min number: " + this.min);
       console.log("max number: " + this.max);
-      // console.log(Math.floor(Math.random() *(parseInt(this.max)) - parseInt(this.min + 1)))
-            this.numbers = []
-      for(let i = 0; i < this.selectedNumber; i++) {
+      // clear numbers array to allow regeneration of numbers, if desired
+      this.numbers = []
 
+      for(let i = 0; i < this.selectedNumber; i++) {
         if(this.min > this.max) {
           this.minFeedback = 'Your minimum number cannot be larger than your maximum number'
         } else if(this.max < this.min) {
@@ -172,7 +169,7 @@ export default {
         let generatedNumber = parseInt(Math.floor(Math.random() *(this.max - this.min + 1)) + this.min);
         console.log(`gen number: ${i} is ${generatedNumber}`);
         this.numbers.push(generatedNumber);
-        this.submitButton = 1;
+        this.showNums = true;
         this.minFeedback = null;
         this.maxFeedback = null;
          // create slug for url
@@ -191,10 +188,6 @@ export default {
       }
     },
     addToApi() {
-      console.log("Im alive")
-
-      // let title = this.title;
-      console.log(this.title)
       let newFactory = {
         title: this.title,
         min: this.min,
@@ -212,23 +205,12 @@ export default {
       .catch((err) => {
         console.log(err)
       });
-    }
-    // addNum() {
-    //   if(this.another) {
-    //     console.log(Math.floor(Math.random() *(this.max - this.min + 1)))
-    //     this.numbers.push(this.another)
-    //     this.another = null
-    //     this.feedback = null
-    //   } else {
-    //     this.feedback = 'Please add a number'
-    //   }
-      
-    // }
+    } // close addToApi method
+    
+  } // close methods
 
+} // close data exports
 
-  }
-
-}
 </script>
 
 <style>

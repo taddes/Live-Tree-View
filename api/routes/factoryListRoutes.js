@@ -13,6 +13,9 @@ module.exports = (app) => {
     .get(factoryList.read_a_factory)
     .delete(factoryList.delete_a_factory);
 
+    app.route('/factories/:factoryId')
+    .put(factoryList.update_a_factory);
+
 };
 
 // const express = require('express');
