@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Factory = require('./api/models/factoryListModel')
 const path = require('path');
+var serveStatic = require('serve-static');
 const bodyParser = require('body-parser');
 const routes = require('./api/routes/factoryListRoutes')
 const socket = require('socket.io')
@@ -9,33 +10,23 @@ const socket = require('socket.io')
 
 // Start Express Server
 const app = express();
+app.use(serveStatic(__dirname + "/dist"));
 
 // Define Port
-const PORT = process.env.PORT || 3000;
-
-// app.get('/', (req, res) => {
-//   console.log('GET request');
-// })
-
-// Set public folder, may need to change
-// app.use(express.static(path.join(__dirname, 'public')));
+const PORT = process.env.MONGODB_URI || 3000;
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/Factorydb')
+mongoose.connect('mongodb://vue_number_gen:LapeFox1701@ds257470.mlab.com:57470/heroku_24z0cgtp')
 // Body Parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 routes(app);
 
-
-
 // Enable Cors
 // app.use(cors());
 
 // Start Server & Listener
-
-
 const server = app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
 });
@@ -46,53 +37,11 @@ const io = socket(server);
 io.on('connection', (socket) => {
   console.log(`made socket connection: ${socket.id}`);
 
+  socket.on('message', (data) => {
+    console.log(data)
+    io.sockets.emit('message', data);
+  })
   socket.on('disconnect', () => {
     console.log(`disconnected from socket id: ${socket.id}`)
   })
 });
-
-
-
-
-
-
-
-
-
-/*const express = require('express');
-const path = require('path');
-var logger = require('morgan');
-var favicon = require('serve-favicon');
-const bodyParser = require('body-parser');
-// const mongoose = require('mongoose');
-
-// Ititialize Express Server
-const app = express();
-const factory = require('./routes/factory');
-
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({'extended': false}));
-app.use(express.static(path.join(__dirname, 'dist')));
-app.use('/factories', express.static(path.join(__dirname, 'dist')));
-app.use('/factory', factory);
-
-// 404 Catch
-app.use((req, res, next) => {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-// Error handler
-app.use((err, req, res, next) => {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') ===
-
-});
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
-})
-*/
