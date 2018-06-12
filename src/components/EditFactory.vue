@@ -1,41 +1,31 @@
 <template>
-  <div class="container edit-factory">
-    <h2>Edit Factory {{title}}</h2>
-
   <div class="container add-factory">
     <h2 class="center-align blue-grey-text darken-4">{{editFactoryTitle}}</h2>
+    <h2 class="center-align blue-grey-text darken-4">{{title}}</h2>
+    <!-- Form Field -->
     <form>
+      <!-- Title Entry -->
       <div class="field title input-field" v-bind:class="{invalid: $v.title.$error}">
         <label class="active" for="title">Factory Title:</label>
         <input type="text" name="title" v-model.trim="title"  @input="$v.title.$touch()"> <!--add .title after -->
-        <span v-if="$v.title.$error" class="red-text">{{$v.title.$model}} Invalid. Please enter a valid title. Only numbers and letters with no spaces.</span>
+        <span v-if="$v.title.$error" class="red-text">{{$v.title.$model}} Invalid. Please enter a valid title. Only numbers and letters with no spaces, up to 25 characters.</span>
         <span v-if="titleFeedback" class="red-text">{{titleFeedback}}</span>
       </div>
-
-      <!-- <div v-for="(number, index) in numbers" v-bind:key="index">
-        <label for="number">Numbers:</label>
-        <input type="text" name="number" v-model.number.trim="numbers[index]">
-      </div>
-      <div class="field add-number">
-        <label for="add-number">Numbers:</label>
-      </div> -->
-
-
+      <!-- Min Number Entry -->
       <div class="field min-number input-field" v-bind:class="{invalid: $v.min.$error}">
         <label class="active" for="min">Minimum number:</label>
         <input type="text" name="min" v-model.number.trim="min"  @input="$v.min.$touch()">
         <span v-if="minFeedback" class="red-text">{{minFeedback}}</span>
         <span v-if="$v.min.$error" class="red-text">{{$v.min.$model}} Invalid. Please enter a vaild number</span>
       </div>
+      <!-- Max Number Entry -->
       <div class="field max-number input-field" v-bind:class="{invalid: $v.max.$error}">
         <label class="active" for="max">Maximum number:</label>
         <input type="text" name="max" v-model.number.trim="max" @input="$v.max.$touch()">
         <span v-if="maxFeedback" class="red-text">{{maxFeedback}}</span>
         <span v-if="$v.max.$error" class="red-text">{{$v.max.$model}} Invalid. Please enter a vaild number</span>
       </div>
-
-
-
+      <!-- Number Selection -->
       <div class="add-number" v-bind:class="{invalid: $v.selectedNumber.$error}">
         <label for="add-number">Choose how many random numbers you'd like</label>
         <select class="browser-default form-control" name="number" v-model="selectedNumber" @input="$v.selectedNumber.$touch()">
@@ -48,8 +38,8 @@
         <span v-if="selectedNumber">You've selected {{factory.selectedNumber}} random numbers to be generated</span>
       </div>
       <br>
-
-      <div>
+      <!-- Displayed Random Numbers -->
+      <div class="number-display">
         <label for="numbers">Your randomly generated numbers:</label>
         <ul class="numbers" >
           <li v-for="(num, index) in numbers" v-bind:key="index">
@@ -57,30 +47,25 @@
           </li>
         </ul>
       </div>
-
+      <!-- Submission Buttons -->
       <div class="button field center-align">
         <button :disabled="$v.$invalid" class="btn indigo factoryButton" @click.prevent="editFactory">Generate</button>
-        <button :disabled="$v.$invalid" class="btn indigo numberButton" @click.prevent="updateApi()"><router-link :to="{ name: 'Index'}">Update</router-link></button>
-        <button class="btn indigo cancelButton"><router-link :to="{ name: 'Index'}">Cancel</router-link></button>
+        <button v-if="submitEnable" class="btn indigo numberButton" @click.prevent="updateApi()"><router-link :to="{ name: 'Index'}">Submit</router-link></button>
+        <router-link :to="{ name: 'Index'}" tag="button" class="btn indigo cancelBUtton">Cancel</router-link>   
       </div>
     </form>
-  </div>
-
-
-
-
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import slugify from 'slugify'
-import { required, alphaNum, integer, between, numeric } from 'vuelidate/lib/validators'
+import { required, alphaNum, integer, between, numeric, maxLength } from 'vuelidate/lib/validators'
 export default {
   name: 'EditFactory',
   data() {
     return {
-      editFactoryTitle: `Edit Factory`,
+      editFactoryTitle: `Edit Factory: `,
       factory: {},
       selectedNumber: null,
       title: null,
@@ -88,6 +73,7 @@ export default {
       min: null,
       max: null,
       urlSlug: null,
+      submitEnable: false,
       titleFeedback: null,
       numberFeedback: null,
       minFeedback: null,
@@ -115,7 +101,8 @@ export default {
    validations: {
     title: {
       required,
-      alphaNum
+      alphaNum,
+      maxLength: maxLength(25)
     },
     min: {
       required,
@@ -131,8 +118,6 @@ export default {
   },
   methods: {
     editFactory() {
-
-      //similar to addFactory in other component
       if(this.title === null) {
         this.titleFeedback = 'Please enter a valid title'
         this.numberFeedback = null;
@@ -169,27 +154,25 @@ export default {
           this.minFeedback = 'Please provide a minimum value'
         } else {
           console.log("max again: " + this.max)
-        let generatedNumber = parseInt(Math.floor(Math.random() *(this.max - this.min + 1)) + this.min);
-        
-        console.log(`gen number: ${i} is ${generatedNumber}`);
-        this.numbers.push(generatedNumber);
-        this.showNum = true;
-        this.minFeedback = null;
-        this.maxFeedback = null;
-        console.log(this.numbers);
-         // create slug for url
-        this.urlSlug = slugify(this.title, {
-          replacement: '-',
-          remove: /[$*_+~.()'"!\-:@`] /g,
-          lower: true
-        })
-        // this.numbers.push(this.another)
-        // console.log([i])
-        // console.log( Math.floor(Math.random() *(this.max - this.min + 1)))
+            let generatedNumber = parseInt(Math.floor(Math.random() *(this.max - this.min + 1)) + this.min);
+            
+            console.log(`gen number: ${i} is ${generatedNumber}`);
+            this.numbers.push(generatedNumber);
+            this.submitEnable = true;
+            this.showNum = true;
+            this.minFeedback = null;
+            this.maxFeedback = null;
+            console.log(this.numbers);
+            // create slug for url
+            this.urlSlug = slugify(this.title, {
+              replacement: '-',
+              remove: /[$*_+~.()'"!\-:@`] /g,
+              lower: true
+            })
           }
-        }
-      }
-    },
+        } // close for loop
+      } // close else statement to execute method
+    }, // close editFactory method
     updateApi() {
       let newFactory = {
         title: this.title,
@@ -217,7 +200,6 @@ export default {
     // mongodb refs
     axios.get('http://localhost:3000/factories/' + ref)
     .then((res) => {
-      
       this.factory = res.data;
       console.log(`factories ${this.factory._id}`)
       console.log(res.data);
@@ -230,7 +212,7 @@ export default {
       this.selectedNumber = this.factory.selectedNumber
     })
     .catch((err) => {
-    console.log(err);
+      console.log(err);
     });
 
   } // close created() lifecycle hook
@@ -244,7 +226,7 @@ export default {
   margin: 60px auto;
   padding:20px;
   max-width:400px;
- 
+  font-family: 'Sunflower', sans-serif;
 }
 .add-factory h2 {
   font-size: 2em;
@@ -253,9 +235,8 @@ export default {
 .button {
   margin: 20px;
   padding: 20px;
+  font-family: 'Sunflower', sans-serif;
 }
-
-
 .add-factory .field {
   margin: 20px auto;
 }

@@ -20,7 +20,7 @@
 export default {
   data() {
     return {
-      title: 'Live Tree Factory'
+      title: 'Random Number Factory'
     }
   }
   

@@ -4,6 +4,7 @@ const Factory = require('./api/models/factoryListModel')
 const path = require('path');
 const bodyParser = require('body-parser');
 const routes = require('./api/routes/factoryListRoutes')
+const socket = require('socket.io')
 // const cors = require('cors');
 
 // Start Express Server
@@ -27,17 +28,28 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 routes(app);
 
+
+
 // Enable Cors
 // app.use(cors());
 
 // Start Server & Listener
 
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
-})
+});
 
+// Socket setup
+const io = socket(server);
 
+io.on('connection', (socket) => {
+  console.log(`made socket connection: ${socket.id}`);
+
+  socket.on('disconnect', () => {
+    console.log(`disconnected from socket id: ${socket.id}`)
+  })
+});
 
 
 
