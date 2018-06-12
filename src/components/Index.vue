@@ -9,6 +9,7 @@
         collection by clicking the pencil icon below each card, or delete it by clicking the 
         trash icon.  Happy random number making!
       </p>
+      <p>{{message}}</p>
       </div>
     </div>
     <div class="index container">
@@ -35,14 +36,17 @@
 </template>
 
 <script>
+import Pusher from 'pusher-js'
 import axios from 'axios'
 export default {
   name: 'Index',
   data () {
     return {
-      factories: []
+      factories: [],
+      message: ''
     }
   },
+
   methods: {
     // method to determine if the clicked factory is deleted or not, based
     // on returned boolean.  If factory.id matches the id in the array, the 
@@ -72,13 +76,17 @@ export default {
 
   },
   created() {
-    
-        axios.get('http://localhost:3000/factories')
+    var socket = io.connect('http://localhost:3000');
+    axios.get('http://localhost:3000/factories')
     .then((res) => {
+
       console.log(res.data);
       this.factories = res.data;
       console.log(`factories ${this.factories}`)
-
+          socket.emit('message', { 
+            message: "I am alive"
+    });
+    // console.log(this.message)
     })
     .catch((err) => {
     console.log(err);
@@ -86,16 +94,6 @@ export default {
     
   },
   mounted() {
-    // axios.get('http://localhost:3000/factories')
-    // .then((res) => {
-    //   console.log(res.data);
-    //   this.factories = res.data;
-    //   console.log(`factories ${this.factories}`)
-
-    // })
-    // .catch((err) => {
-    // console.log(err);
-    // });
 
   }
 }

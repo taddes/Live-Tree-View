@@ -10,7 +10,6 @@
         <span v-if="$v.title.$error" class="red-text">{{$v.title.$model}} Invalid. Please enter a valid title. Only numbers and letters with no spaces, up to 25 characters.</span>
         <span v-if="titleFeedback" class="red-text">{{titleFeedback}}</span>
       </div>
-      <div>{{$v.title}}</div>
      <!-- Min Number Entry -->
       <div class="field min-number input-field" v-bind:class="{invalid: $v.min.$error}">
         <label for="min">Minimum number:</label>
@@ -18,7 +17,6 @@
         <span v-if="minFeedback" class="red-text">{{minFeedback}}</span>
         <span v-if="$v.min.$error" class="red-text">{{$v.min.$model}} Invalid. Please enter a vaild number</span>
       </div>
-      <div>{{$v.min}}</div>
       <!-- Max Number Entry -->
       <div class="field max-number input-field" v-bind:class="{invalid: $v.max.$error}">
         <label for="max">Maximum number:</label>
@@ -26,7 +24,6 @@
         <span v-if="maxFeedback" class="red-text">{{maxFeedback}}</span>
         <span v-if="$v.max.$error" class="red-text">{{$v.max.$model}} Invalid. Please enter a vaild number</span>
       </div>
-       <div>{{$v.max}}</div>
      <!-- Number Selection -->
       <div class="add-number" v-bind:class="{invalid: $v.selectedNumber.$error}">
         <label for="add-number">Choose how many random numbers you'd like</label>
@@ -39,7 +36,6 @@
         <p v-if="numberFeedback" class="red-text">{{numberFeedback}}</p>
         <span v-if="selectedNumber">You've selected {{selectedNumber}} random numbers to be generated</span>
       </div>
-      <div>{{$v.selectedNumber}}</div>
       <br>
     <!-- Displayed Random Numbers -->
       <div class="number-display" v-if="showNums">
@@ -61,6 +57,7 @@
 </template>
 
 <script>
+import Pusher from 'pusher-js'
 import axios from 'axios'
 import slugify from 'slugify'
 import { required, alphaNum, integer, between, numeric, maxLength } from 'vuelidate/lib/validators'
@@ -179,11 +176,11 @@ export default {
     }
   }, // Close addFactory method
     addToApi() {
+      let pusher = new Pusher('84bfa7245bc98cd0b907', { cluster: 'mt1' })
       let newFactory = {
         title: this.title,
         min: this.min,
         max: this.max,
-        number: this.number,
         selectedNumber: this.selectedNumber,
         numbers: this.numbers,
         urlSlug: this.urlSlug
@@ -192,6 +189,10 @@ export default {
       axios.post('http://localhost:3000/factories/', newFactory)
       .then((res) => {
         console.log(res);
+    // pusher.subscribe('factories')
+    // pusher.bind('factory_added', data => {
+    //   console.log("pusher data" + pusher.data)
+    // })
       })
       .catch((err) => {
         console.log(err)
