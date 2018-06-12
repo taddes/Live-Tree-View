@@ -1,22 +1,36 @@
 <template>
-  <div class="index container">
-    <!-- Outputs discrete card for each factory element -->
-    <div class="card" v-for="factory in factories" v-bind:key="factory._id">
-      <div class="card-content">
-        <i class="material-icons delete" @click="deleteFactory(factory._id)">delete</i>
-        <h2 class="blue-grey-text">{{factory.title}}</h2>
-        <ul class="numbers">
-          <li v-for="(num, index) in factory.numbers" v-bind:key="index">
-            <span class="chip">{{num}}</span>
-          </li>
-        </ul>
+  <div>
+    <div class="heading container row">
+      <div class="col s12 m12 l12">
+      <h1>Random Number Factory</h1>
+      <br>
+      <p>Welcome to the Random Number Factory! Below are all random number collections.
+        To create a new collection, click the + icon above.  You can easily edit your 
+        collection by clicking the pencil icon below each card, or delete it by clicking the 
+        trash icon.  Happy random number making!
+      </p>
       </div>
-      <span class="btn-floating btn-large halfway-fab">
-        <router-link :to="{ name: 'EditFactory', params: {factory_slug: factory._id} }">
-          <i class="material-icons edit">edit</i>
-        </router-link>
-      </span>
     </div>
+    <div class="index container">
+      <!-- Outputs discrete card for each factory element -->
+      <div class="card" v-for="factory in factories" v-bind:key="factory._id">
+        <div class="card-content">
+          <i class="material-icons delete" @click="deleteFactory(factory._id)">delete</i>
+          <h2 class="blue-grey-text">{{factory.title}}</h2>
+          <ul class="numbers">
+            <li v-for="(num, index) in factory.numbers" v-bind:key="index">
+              <span class="chip">{{num}}</span>
+            </li>
+          </ul>
+        </div>
+        <span class="btn-floating btn-large halfway-fab">
+          <router-link :to="{ name: 'EditFactory', params: {factory_slug: factory._id} }">
+            <i class="material-icons edit">edit</i>
+          </router-link>
+        </span>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -58,6 +72,7 @@ export default {
 
   },
   created() {
+    
         axios.get('http://localhost:3000/factories')
     .then((res) => {
       console.log(res.data);
@@ -95,6 +110,12 @@ export default {
   grid-gap: 30px;
   margin-top: 60px;
 }
+.heading {
+  text-align: center;
+}
+.heading p {
+  font-size: 1.6em;
+}
 .index h2 {
    font-family: 'Sunflower', sans-serif;
    font-size: 1.8em;
@@ -114,6 +135,12 @@ export default {
   cursor: pointer;
   color: #aaa;
   font-size: 1.8em;
+}
+.card {
+  margin-bottom: 40px;
+}
+.heading {
+  font-family: 'Sunflower', sans-serif;
 }
 
 </style>
