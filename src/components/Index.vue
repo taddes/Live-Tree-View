@@ -3,13 +3,14 @@
     <div class="heading container row">
       <div class="col s12 m12 l12">
       <h1>Random Number Factory</h1>
+      <p>{{message}}</p>
+      <p>{{data}}</p>
       <br>
       <p>Welcome to the Random Number Factory! Below are all random number collections.
         To create a new collection, click the + icon above.  You can easily edit your 
         collection by clicking the pencil icon below each card, or delete it by clicking the 
         trash icon.  Happy random number making!
       </p>
-      <p>{{message}}</p>
       </div>
     </div>
     <div class="index container">
@@ -36,14 +37,16 @@
 </template>
 
 <script>
-import Pusher from 'pusher-js'
+// import socket from 'socket.io'
+import Vue from 'vue'
 import axios from 'axios'
 export default {
   name: 'Index',
   data () {
     return {
       factories: [],
-      message: ''
+      message: '',
+      data: null
     }
   },
 
@@ -52,12 +55,9 @@ export default {
     // on returned boolean.  If factory.id matches the id in the array, the 
     // factory not is deleted. If it does not match, it is filtered out
     deleteFactory(id) {
-      console.log(id)
       // Delete doc from database, using unique id.
-      axios.delete('http://localhost:3000/factories/' + id)
+      axios.delete('/factories/' + id)
       .then((res) => {
-        console.log("hi!")
-        console.log(id)
         console.log(this.factories)
         this.factories = this.factories.filter(factory => {
           console.log('trying!')
@@ -67,7 +67,9 @@ export default {
            return factory._id != id
            console.log(factory.id)
       console.log('deleted!')
-      })
+
+    })
+    socket.emit('deleteFactory', this.factories)
     })
     .catch((err) => {
     console.log(err);
@@ -76,25 +78,55 @@ export default {
 
   },
   created() {
-    var socket = io.connect('http://localhost:3000');
-    axios.get('http://localhost:3000/factories')
+    // var socket = io.connect('http://localhost:3000');
+
+    // When server emits message, update array
+   
+
+    axios.get('/factories')
     .then((res) => {
+        this.factories = res.data;
+        console.log(this.factories.length)
+       socket.on('deleteFactory', (factory) => {
+            this.factories = factory
+     })
+     socket.on('addFactory', (newFactory) => {
+       this.factories.push(newFactory)
+
+     });
+       socket.on('editFactory', (newFactory) => {
+         console.log(this.factories.length)
+
+         for(let i = 0; i < this.factories.length; i++) {
+           console.log(`trying to edit factory ${[i]}`)
+           if(this.factories[i].title === newFactory.title) {
+              // Vue.set(this.factories, i, newFactory)
+              this.factories[i] = newFactory
+                Vue.set(this.factories, i, newFactory)
+            console.log(`showing this.factoires ${this.factories}`)
+             //Object.assign(obj to assign into(this.factories[i]), what you want to assign(newFactory))
+           }
+            Vue.set(this.factories, i, newFactory)
+            console.log(`showing this.factoires ${this.factories}`)
+         }
+
+     }); // Close editFactory socket
 
       console.log(res.data);
-      this.factories = res.data;
+      // this.factories = res.data;
       console.log(`factories ${this.factories}`)
-          socket.emit('message', { 
-            message: "I am alive"
-    });
-    // console.log(this.message)
+    //       socket.emit('message', { 
+    //         message: "I am alive"
+    // });
+    socket.on('user joined', (socketId) => {
+      this.message = socketId;
+    })
+    console.log(this.message)
     })
     .catch((err) => {
     console.log(err);
     });
     
-  },
-  mounted() {
-
   }
 }
 

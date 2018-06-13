@@ -37,10 +37,35 @@ const io = socket(server);
 io.on('connection', (socket) => {
   console.log(`made socket connection: ${socket.id}`);
 
-  socket.on('message', (data) => {
-    console.log(data)
-    io.sockets.emit('message', data);
+  // deleted factory
+  socket.on('deleteFactory', (factory) => {
+    console.log(`socket deleteFactory event`)
+    // Emit this event to all clients connected
+    io.emit('deleteFactory', factory)
+    console.log(`socket deleteFactory emission!`)
   })
+// add factory
+socket.on('addFactory', (factory) => {
+  console.log(`socket addFactory event`)
+  // Emit this event to all clients connected
+  io.emit('addFactory', factory)
+  console.log(`socket addFactory emission!`)
+})
+
+// edit factory
+socket.on('editFactory', (factory) => {
+  console.log(`socket editFactory event`)
+  // Emit this event to all clients connected
+  io.emit('editFactory', factory)
+  console.log(`socket editFactory emission!`)
+})
+
+
+  io.emit('user joined', socket.id)
+  // socket.on('message', (data) => {
+  //   console.log(data)
+  //   io.sockets.emit('message', socket.id);
+  // })
   socket.on('disconnect', () => {
     console.log(`disconnected from socket id: ${socket.id}`)
   })

@@ -49,7 +49,7 @@
       <!-- Submission Buttons -->
       <div class="button field center-align">
         <button :disabled="$v.$invalid" class="btn indigo factoryButton" @click.prevent="addFactory">Generate</button>
-        <button v-if="submitEnable" class="btn indigo numberButton" @click.prevent="addToApi"><router-link :to="{ name: 'Index'}">Submit</router-link></button>
+        <router-link  v-if="submitEnable" class="btn indigo numberButton" tag="button" @click.prevent.native="addToApi" :to="{ name: 'Index'}">Submit</router-link>
         <router-link :to="{ name: 'Index'}" tag="button" class="btn indigo cancelBUtton">Cancel</router-link>
       </div>
     </form>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import Pusher from 'pusher-js'
+// import socket from 'socket.io'
 import axios from 'axios'
 import slugify from 'slugify'
 import { required, alphaNum, integer, between, numeric, maxLength } from 'vuelidate/lib/validators'
@@ -176,7 +176,7 @@ export default {
     }
   }, // Close addFactory method
     addToApi() {
-      let pusher = new Pusher('84bfa7245bc98cd0b907', { cluster: 'mt1' })
+      this.submitEnable = false;
       let newFactory = {
         title: this.title,
         min: this.min,
@@ -186,7 +186,10 @@ export default {
         urlSlug: this.urlSlug
       }
       console.log(newFactory)
-      axios.post('http://localhost:3000/factories/', newFactory)
+        socket.emit('addFactory', newFactory)
+        console.log(`new factory ${newFactory}`)
+         console.log(`this new factory ${this.newFactory}`)
+      axios.post('/factories/', newFactory)
       .then((res) => {
         console.log(res);
     // pusher.subscribe('factories')

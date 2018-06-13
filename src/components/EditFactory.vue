@@ -50,7 +50,7 @@
       <!-- Submission Buttons -->
       <div class="button field center-align">
         <button :disabled="$v.$invalid" class="btn indigo factoryButton" @click.prevent="editFactory">Generate</button>
-        <button v-if="submitEnable" class="btn indigo numberButton" @click.prevent="updateApi()"><router-link :to="{ name: 'Index'}">Submit</router-link></button>
+        <router-link tag="button" v-if="submitEnable" class="btn indigo numberButton" @click.prevent.native="updateApi()" :to="{ name: 'Index'}" >Submit</router-link>
         <router-link :to="{ name: 'Index'}" tag="button" class="btn indigo cancelBUtton">Cancel</router-link>   
       </div>
     </form>
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+// import socket from 'socket.io'
 import axios from 'axios'
 import slugify from 'slugify'
 import { required, alphaNum, integer, between, numeric, maxLength } from 'vuelidate/lib/validators'
@@ -174,6 +175,7 @@ export default {
       } // close else statement to execute method
     }, // close editFactory method
     updateApi() {
+      submitEnable: false
       let newFactory = {
         title: this.title,
         min: this.min,
@@ -185,7 +187,11 @@ export default {
       }
       console.log(this.factory._id)
       console.log(this.title)
-      axios.put('http://localhost:3000/factories/' + this.factory._id, newFactory)
+      // Socket Edit Event
+      console.log(newFactory)
+      socket.emit('editFactory', newFactory)
+      // axios put request
+      axios.put('/factories/' + this.factory._id, newFactory)
       .then((res) => {
         console.log(res)
       })
@@ -198,7 +204,7 @@ export default {
     let ref = this.$route.params.factory_slug
     console.log(ref)
     // mongodb refs
-    axios.get('http://localhost:3000/factories/' + ref)
+    axios.get('/factories/' + ref)
     .then((res) => {
       this.factory = res.data;
       console.log(`factories ${this.factory._id}`)
