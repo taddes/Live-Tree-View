@@ -23,7 +23,6 @@ export default {
       title: 'Random Number Factory'
     }
   }
-  
 }
 </script>
 
@@ -38,8 +37,5 @@ export default {
 .nav-title {
   font-family: 'Sunflower', sans-serif;
 }
-
-
-
 </style>
 

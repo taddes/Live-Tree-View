@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const Factory = mongoose.model('Factories');
-const socket = require('socket.io')
+const socket = require('socket.io');
 
 exports.list_all_factories = (req, res) => {
   Factory.find({}, (err, factory) => {

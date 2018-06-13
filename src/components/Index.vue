@@ -3,8 +3,6 @@
     <div class="heading container row">
       <div class="col s12 m12 l12">
       <h1>Random Number Factory</h1>
-      <p>{{message}}</p>
-      <p>{{data}}</p>
       <br>
       <p>Welcome to the Random Number Factory! Below are all random number collections.
         To create a new collection, click the + icon above.  You can easily edit your 
@@ -32,7 +30,6 @@
         </span>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -118,11 +115,9 @@ export default {
      }); // Close editFactory socket
 
       console.log(res.data);
-      // this.factories = res.data;
+
       console.log(`factories ${this.factories}`)
-    //       socket.emit('message', { 
-    //         message: "I am alive"
-    // });
+
     socket.on('user joined', (socketId) => {
       this.message = socketId;
     })

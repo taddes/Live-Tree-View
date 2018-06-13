@@ -192,10 +192,6 @@ export default {
       axios.post('/factories/', newFactory)
       .then((res) => {
         console.log(res);
-    // pusher.subscribe('factories')
-    // pusher.bind('factory_added', data => {
-    //   console.log("pusher data" + pusher.data)
-    // })
       })
       .catch((err) => {
         console.log(err)
