@@ -98,7 +98,7 @@ export default {
      });
        socket.on('editFactory', (newFactory) => {
          console.log(this.factories.length)
-
+        //Testing for loop
          for(let i = 0; i < this.factories.length; i++) {
            console.log(`trying to edit factory ${[i]}`)
            console.log(newFactory)
