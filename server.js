@@ -10,7 +10,7 @@ const socket = require('socket.io');
 
 // Start Express Server
 const app = express();
-app.use(express.static(__dirname + '/dist'));
+app.use(serveStatic(__dirname + '/dist'));
 
 // Define port
 const PORT = process.env.MONGODB_URI || 3000;
