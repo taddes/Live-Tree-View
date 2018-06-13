@@ -10,14 +10,14 @@ const socket = require('socket.io');
 
 // Start Express Server
 const app = express();
-app.use(express.static(__dirname + "/dist"));
+app.use(express.static(__dirname + '/dist'));
 
 // Define port
 const PORT = process.env.MONGODB_URI || 3000;
 
 // Connect mongoose 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_24z0cgtp:9k2c8j1ksh0l4s16btlgt773vl@ds257470.mlab.com:57470/heroku_24z0cgtp');
+mongoose.connect('mongodb://heroku_24z0cgtp:9k2c8j1ksh0l4s16btlgt773vl@ds257470.mlab.com:57470/heroku_24z0cgtp');
 
 // Body Parser middleware
 app.use(bodyParser.json());
