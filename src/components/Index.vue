@@ -55,6 +55,8 @@ export default {
     // on returned boolean.  If factory.id matches the id in the array, the 
     // factory not is deleted. If it does not match, it is filtered out
     deleteFactory(id) {
+      
+      console.log(id)
       // Delete doc from database, using unique id.
       axios.delete('/factories/' + id)
       .then((res) => {
@@ -99,15 +101,18 @@ export default {
 
          for(let i = 0; i < this.factories.length; i++) {
            console.log(`trying to edit factory ${[i]}`)
-           if(this.factories[i].title === newFactory.title) {
+           console.log(newFactory)
+           if(this.factories[i]._id === newFactory._id) {
               // Vue.set(this.factories, i, newFactory)
-              this.factories[i] = newFactory
+              console.log('am I alive?')
+              
                 Vue.set(this.factories, i, newFactory)
+                this.factories[i] = newFactory
             console.log(`showing this.factoires ${this.factories}`)
              //Object.assign(obj to assign into(this.factories[i]), what you want to assign(newFactory))
            }
-            Vue.set(this.factories, i, newFactory)
-            console.log(`showing this.factoires ${this.factories}`)
+            // Vue.set(this.factories, i, newFactory)
+            // console.log(`showing this.factoires ${this.factories}`)
          }
 
      }); // Close editFactory socket

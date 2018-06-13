@@ -177,6 +177,7 @@ export default {
     updateApi() {
       submitEnable: false
       let newFactory = {
+        _id: this.factory._id,
         title: this.title,
         min: this.min,
         max: this.max,
