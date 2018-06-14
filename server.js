@@ -13,7 +13,7 @@ const app = express();
 app.use(serveStatic(__dirname + '/dist'));
 
 // Define port
-const PORT = process.env.MONGODB_URI || 3000;
+const PORT = process.env.PORT || 3000;
 
 // Connect mongoose 
 mongoose.Promise = global.Promise;
