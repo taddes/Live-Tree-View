@@ -129,10 +129,8 @@ export default {
       } else {
         this.titleFeedback = null;
         this.numberFeedback = null;
-
         // clear numbers array to allow regeneration of numbers, if desired
         this.numbers = []
-
         for(let i = 0; i < this.selectedNumber; i++) {
           if(this.min > this.max) {
             this.minFeedback = 'Your minimum number cannot be larger than your maximum number'
@@ -150,8 +148,6 @@ export default {
             this.maxFeedback = 'Please provide a maximum value'
             this.minFeedback = 'Please provide a minimum value'
           } else {
-            console.log(this.numbers)
-            console.log("max again: " + this.max)
              // generate random number, push to array, clear any input feedback
             let generatedNumber = parseInt(Math.floor(Math.random() *(this.max - this.min + 1)) + this.min);
             this.numbers.push(generatedNumber);
@@ -159,7 +155,6 @@ export default {
             this.submitEnable = true;
             this.minFeedback = null;
             this.maxFeedback = null;
-
             // create slug for url
             this.urlSlug = slugify(this.title, {
               replacement: '-',

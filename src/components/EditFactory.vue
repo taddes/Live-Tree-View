@@ -129,10 +129,8 @@ export default {
       } else {
         this.titleFeedback = null;
         this.numberFeedback = null;
-
         // clear numbers array for regeneration of random numbers, if desired
         this.numbers = []
-
         for(let i = 0; i < this.selectedNumber; i++) {
           if(this.min > this.max) {
             this.minFeedback = 'Your minimum number cannot be larger than your maximum number'
