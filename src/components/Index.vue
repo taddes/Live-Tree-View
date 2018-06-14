@@ -67,16 +67,25 @@ export default {
     axios.get('/factories')
     .then((res) => {
       this.factories = res.data;
+    })
+    .catch((err) => {
+    console.log(err);
+    });
 
-      socket.on('deleteFactory', (factory) => {
+  }, // close created lifecycle hook
+  
+  mounted() {
+     socket.on('deleteFactory', (factory) => {
         this.factories = factory
      });
 
-     socket.on('addFactory', (newFactory) => {
+      socket.on('addFactory', (newFactory) => {
        this.factories.push(newFactory)
      });
+  }, // close mounted lifecycle hook
 
-       socket.on('editFactory', (newFactory) => {
+  beforeUpdate() {
+            socket.on('editFactory', (newFactory) => {
          for(let i = 0; i < this.factories.length; i++) {
            if(this.factories[i]._id === newFactory._id) {
               Vue.set(this.factories, i, newFactory)
@@ -86,12 +95,7 @@ export default {
          }
       });
 
-    })
-    .catch((err) => {
-    console.log(err);
-    });
-
-  } // close created lifecycle hook
+  } // close beforeUpdate lifecycle hook
 
 } // close data exports
 
@@ -134,8 +138,13 @@ export default {
 .card {
   margin-bottom: 40px;
 }
+.card-content {
+  width: 100%;
+  height: auto;
+}
 .heading {
   font-family: 'Sunflower', sans-serif;
 }
+
 
 </style>

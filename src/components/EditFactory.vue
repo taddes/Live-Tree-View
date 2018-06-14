@@ -50,7 +50,7 @@
       <!-- Submission Buttons -->
       <div class="button field center-align">
         <button :disabled="$v.$invalid" class="btn indigo factoryButton" @click.prevent="editFactory">Generate</button>
-        <router-link tag="button" v-if="submitEnable" class="btn indigo numberButton" @click.prevent.native="updateApi()" :to="{ name: 'Index'}" >Submit</router-link>
+        <router-link tag="button" v-if="submitEnable" class="btn indigo numberButton" @click.prevent.native="updateApi" :to="{ name: 'Index'}" >Submit</router-link>
         <router-link :to="{ name: 'Index'}" tag="button" class="btn indigo cancelBUtton">Cancel</router-link>   
       </div>
     </form>
@@ -187,6 +187,8 @@ export default {
       .catch((err) => {
         console.log(err)
       });
+      // Socket Edit Event
+
     }
   },
   created() {
