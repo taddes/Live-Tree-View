@@ -180,7 +180,7 @@ export default {
       // axios post 
       axios.post('/factories/', newFactory)
       .then((res) => {
-        console.log(res);
+        console.log(`data posted`);
       })
       .catch((err) => {
         console.log(err)

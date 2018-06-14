@@ -182,7 +182,7 @@ export default {
       // axios put request
       axios.put('/factories/' + this.factory._id, newFactory)
       .then((res) => {
-        console.log(res)
+        console.log(`updated`)
       })
       .catch((err) => {
         console.log(err)
