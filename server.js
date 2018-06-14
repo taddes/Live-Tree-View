@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const routes = require('./api/routes/factoryListRoutes');
 const socket = require('socket.io');
 
-
 // Start Express Server
 const app = express();
 app.use(serveStatic(__dirname + '/dist'));
@@ -40,30 +39,24 @@ io.on('connection', (socket) => {
 
   // deleted factory
   socket.on('deleteFactory', (factory) => {
-    console.log(`socket deleteFactory event`)
     // Emit this event to all clients connected
     io.emit('deleteFactory', factory);
-    console.log(`socket deleteFactory emission!`)
   });
 
-// add factory
-socket.on('addFactory', (factory) => {
-  console.log(`socket addFactory event`)
-  // Emit this event to all clients connected
-  io.emit('addFactory', factory);
-  console.log(`socket addFactory emission!`)
-});
+  // add factory
+  socket.on('addFactory', (factory) => {
+    // Emit this event to all clients connected
+    io.emit('addFactory', factory);
+  });
 
-// edit factory
-socket.on('editFactory', (factory) => {
-  console.log(`socket editFactory event`)
-  // Emit this event to all clients connected
-  io.emit('editFactory', factory);
-  console.log(`socket editFactory emission!`)
-});
+  // edit factory
+  socket.on('editFactory', (factory) => {
+    // Emit this event to all clients connected
+    io.emit('editFactory', factory);
+  });
 
   socket.on('disconnect', () => {
     console.log(`disconnected from socket id: ${socket.id}`);
   });
 
-});
+}); // close io.on(connection)

@@ -57,7 +57,6 @@
 </template>
 
 <script>
-// import socket from 'socket.io'
 import axios from 'axios'
 import slugify from 'slugify'
 import { required, alphaNum, integer, between, numeric, maxLength } from 'vuelidate/lib/validators'
@@ -117,7 +116,7 @@ export default {
     }
   },
   methods: {
-    addFactory(){
+    addFactory() {
       if(this.title === null) {
         this.titleFeedback = 'Please enter a valid title'
         this.numberFeedback = null;
@@ -130,51 +129,47 @@ export default {
       } else {
         this.titleFeedback = null;
         this.numberFeedback = null;
-      console.log("title: " + this.title);
-      console.log("selected number: " + this.selectedNumber);
-      console.log("min number: " + this.min);
-      console.log("max number: " + this.max);
-      // clear numbers array to allow regeneration of numbers, if desired
-      this.numbers = []
+
+        // clear numbers array to allow regeneration of numbers, if desired
+        this.numbers = []
 
         for(let i = 0; i < this.selectedNumber; i++) {
-        if(this.min > this.max) {
-          this.minFeedback = 'Your minimum number cannot be larger than your maximum number'
-        } else if(this.max < this.min) {
-          this.maxFeedback = 'Your maximum number cannot be less than your minimum number'
-        } else if(this.max == this.min) {
-          this.maxFeedback = 'Your minimum and maximum numbers cannot be equal'
-        } else if(this.min == this.max) {
-          this.minFeedback = 'Your minimum and maximum numbers cannot be equal'
-        } else if(this.min == null) {
-          this.minFeedback = 'Please provide a minimum value'
-        } else if(this.max == null) {
-          this.maxFeedback = 'Please provide a maximum value'
-        } else if(this.max == null && this.min === null) {
-          this.maxFeedback = 'Please provide a maximum value'
-          this.minFeedback = 'Please provide a minimum value'
-        } else {
-          console.log(this.numbers)
-          console.log("max again: " + this.max)
-          // Generate random numbers, push ro array, clear any possible validation feedback, enable submission
-          let generatedNumber = parseInt(Math.floor(Math.random() *(this.max - this.min + 1)) + this.min);
-          console.log(`gen number: ${i} is ${generatedNumber}`);
-          this.numbers.push(generatedNumber);
-          this.showNums = true;
-          this.submitEnable = true;
-          this.minFeedback = null;
-          this.maxFeedback = null;
+          if(this.min > this.max) {
+            this.minFeedback = 'Your minimum number cannot be larger than your maximum number'
+          } else if(this.max < this.min) {
+            this.maxFeedback = 'Your maximum number cannot be less than your minimum number'
+          } else if(this.max == this.min) {
+            this.maxFeedback = 'Your minimum and maximum numbers cannot be equal'
+          } else if(this.min == this.max) {
+            this.minFeedback = 'Your minimum and maximum numbers cannot be equal'
+          } else if(this.min == null) {
+            this.minFeedback = 'Please provide a minimum value'
+          } else if(this.max == null) {
+            this.maxFeedback = 'Please provide a maximum value'
+          } else if(this.max == null && this.min === null) {
+            this.maxFeedback = 'Please provide a maximum value'
+            this.minFeedback = 'Please provide a minimum value'
+          } else {
+            console.log(this.numbers)
+            console.log("max again: " + this.max)
+             // generate random number, push to array, clear any input feedback
+            let generatedNumber = parseInt(Math.floor(Math.random() *(this.max - this.min + 1)) + this.min);
+            this.numbers.push(generatedNumber);
+            this.showNums = true;
+            this.submitEnable = true;
+            this.minFeedback = null;
+            this.maxFeedback = null;
 
-          // create slug for url
-          this.urlSlug = slugify(this.title, {
-            replacement: '-',
-            remove: /[$*_+~.()'"!\-:@`] /g,
-            lower: true
-          })
-        }
-      }
-    }
-  }, // Close addFactory method
+            // create slug for url
+            this.urlSlug = slugify(this.title, {
+              replacement: '-',
+              remove: /[$*_+~.()'"!\-:@`] /g,
+              lower: true
+            });
+          }
+        } // close for loop
+      } // close else statement to execute method
+    }, // Close addFactory method
     addToApi() {
       this.submitEnable = false;
       let newFactory = {
@@ -185,10 +180,9 @@ export default {
         numbers: this.numbers,
         urlSlug: this.urlSlug
       }
-      console.log(newFactory)
-        socket.emit('addFactory', newFactory)
-        console.log(`new factory ${newFactory}`)
-         console.log(`this new factory ${this.newFactory}`)
+      // Socket Add Event
+      socket.emit('addFactory', newFactory);
+      // axios post 
       axios.post('/factories/', newFactory)
       .then((res) => {
         console.log(res);
@@ -210,7 +204,6 @@ export default {
   padding:20px;
   max-width:400px;
   font-family: 'Sunflower', sans-serif;
- 
 }
 .add-factory h2 {
   font-size: 2em;

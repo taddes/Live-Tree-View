@@ -41,14 +41,9 @@ exports.delete_a_factory = (req, res) => {
 exports.update_a_factory = (req, res) => {
   let updated_factory = req.body
   let id = req.params.factoryId
-  console.log(req.body)
-  console.log('update!')
-  console.log(req.params.factoryId)
   Factory.findByIdAndUpdate(id, updated_factory, (err, factory) => {
     if(err)
     res.send(err);
     res.json(factory);
-    console.log('update!')
-    console.log(req.params.factoryId)
   });
 };

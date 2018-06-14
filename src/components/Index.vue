@@ -34,7 +34,6 @@
 </template>
 
 <script>
-// import socket from 'socket.io'
 import Vue from 'vue'
 import axios from 'axios'
 export default {
@@ -46,89 +45,55 @@ export default {
       data: null
     }
   },
-
   methods: {
-    // method to determine if the clicked factory is deleted or not, based
-    // on returned boolean.  If factory.id matches the id in the array, the 
-    // factory not is deleted. If it does not match, it is filtered out
+    /* method to determine if the clicked factory is deleted or not, based
+    on returned boolean.  If factory.id matches the id in the array, the 
+     factory not is deleted. If it does not match, it is filtered out */
     deleteFactory(id) {
-      
-      console.log(id)
       // Delete doc from database, using unique id.
       axios.delete('/factories/' + id)
       .then((res) => {
-        console.log(this.factories)
         this.factories = this.factories.filter(factory => {
-          console.log('trying!')
-          console.log('factory._id' + factory._id)
-          console.log('id' + id)
-          console.log('factory'+ factory)
            return factory._id != id
-           console.log(factory.id)
-      console.log('deleted!')
-
-    })
-    socket.emit('deleteFactory', this.factories)
+      })
+      socket.emit('deleteFactory', this.factories)
     })
     .catch((err) => {
     console.log(err);
     });
    }
-
   },
   created() {
-    // var socket = io.connect('http://localhost:3000');
-
-    // When server emits message, update array
-   
-
     axios.get('/factories')
     .then((res) => {
-        this.factories = res.data;
-        console.log(this.factories.length)
-       socket.on('deleteFactory', (factory) => {
-            this.factories = factory
-     })
+      this.factories = res.data;
+
+      socket.on('deleteFactory', (factory) => {
+        this.factories = factory
+     });
+
      socket.on('addFactory', (newFactory) => {
        this.factories.push(newFactory)
-
      });
+
        socket.on('editFactory', (newFactory) => {
-         console.log(this.factories.length)
-        //Testing for loop
          for(let i = 0; i < this.factories.length; i++) {
-           console.log(`trying to edit factory ${[i]}`)
-           console.log(newFactory)
            if(this.factories[i]._id === newFactory._id) {
-              // Vue.set(this.factories, i, newFactory)
-              console.log('am I alive?')
-              
-                Vue.set(this.factories, i, newFactory)
-                this.factories[i] = newFactory
-            console.log(`showing this.factoires ${this.factories}`)
-             //Object.assign(obj to assign into(this.factories[i]), what you want to assign(newFactory))
+              Vue.set(this.factories, i, newFactory)
+              // emulates: this.factories[i] = newFactory
+              // but the Vue.set method required to support bi-directional data binding
            }
-            // Vue.set(this.factories, i, newFactory)
-            // console.log(`showing this.factoires ${this.factories}`)
          }
+      });
 
-     }); // Close editFactory socket
-
-      console.log(res.data);
-
-      console.log(`factories ${this.factories}`)
-
-    socket.on('user joined', (socketId) => {
-      this.message = socketId;
-    })
-    console.log(this.message)
     })
     .catch((err) => {
     console.log(err);
     });
-    
-  }
-}
+
+  } // close created lifecycle hook
+
+} // close data exports
 
 </script>
 

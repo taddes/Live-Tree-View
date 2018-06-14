@@ -58,7 +58,6 @@
 </template>
 
 <script>
-// import socket from 'socket.io'
 import axios from 'axios'
 import slugify from 'slugify'
 import { required, alphaNum, integer, between, numeric, maxLength } from 'vuelidate/lib/validators'
@@ -70,7 +69,6 @@ export default {
       factory: {},
       selectedNumber: null,
       title: null,
-      another: null,
       min: null,
       max: null,
       urlSlug: null,
@@ -131,45 +129,40 @@ export default {
       } else {
         this.titleFeedback = null;
         this.numberFeedback = null;
-      console.log("title: " + this.title);
-      console.log("selected number: " + this.selectedNumber);
-      console.log("min number: " + this.min);
-      console.log("max number: " + this.max);
-      // clear numbers array for regeneration of random numbers, if desired
-      this.numbers = []
-      for(let i = 0; i < this.selectedNumber; i++) {
-        if(this.min > this.max) {
-          this.minFeedback = 'Your minimum number cannot be larger than your maximum number'
-        } else if(this.max < this.min) {
-          this.maxFeedback = 'Your maximum number cannot be less than your minimum number'
-        } else if(this.max == this.min) {
-          this.maxFeedback = 'Your minimum and maximum numbers cannot be equal'
-        } else if(this.min == this.max) {
-          this.minFeedback = 'Your minimum and maximum numbers cannot be equal'
-        } else if(this.min == null) {
-          this.minFeedback = 'Please provide a minimum value'
-        } else if(this.max == null) {
-          this.maxFeedback = 'Please provide a maximum value'
-        } else if(this.max == null && this.min === null) {
-          this.maxFeedback = 'Please provide a maximum value'
-          this.minFeedback = 'Please provide a minimum value'
-        } else {
-          console.log("max again: " + this.max)
+
+        // clear numbers array for regeneration of random numbers, if desired
+        this.numbers = []
+
+        for(let i = 0; i < this.selectedNumber; i++) {
+          if(this.min > this.max) {
+            this.minFeedback = 'Your minimum number cannot be larger than your maximum number'
+          } else if(this.max < this.min) {
+            this.maxFeedback = 'Your maximum number cannot be less than your minimum number'
+          } else if(this.max == this.min) {
+            this.maxFeedback = 'Your minimum and maximum numbers cannot be equal'
+          } else if(this.min == this.max) {
+            this.minFeedback = 'Your minimum and maximum numbers cannot be equal'
+          } else if(this.min == null) {
+            this.minFeedback = 'Please provide a minimum value'
+          } else if(this.max == null) {
+            this.maxFeedback = 'Please provide a maximum value'
+          } else if(this.max == null && this.min === null) {
+            this.maxFeedback = 'Please provide a maximum value'
+            this.minFeedback = 'Please provide a minimum value'
+          } else {
+            // generate random number, push to array, clear any input feedback
             let generatedNumber = parseInt(Math.floor(Math.random() *(this.max - this.min + 1)) + this.min);
-            
-            console.log(`gen number: ${i} is ${generatedNumber}`);
             this.numbers.push(generatedNumber);
             this.submitEnable = true;
             this.showNum = true;
             this.minFeedback = null;
             this.maxFeedback = null;
-            console.log(this.numbers);
             // create slug for url
             this.urlSlug = slugify(this.title, {
               replacement: '-',
               remove: /[$*_+~.()'"!\-:@`] /g,
               lower: true
-            })
+            });
           }
         } // close for loop
       } // close else statement to execute method
@@ -186,10 +179,7 @@ export default {
         numbers: this.numbers,
         urlSlug: this.urlSlug
       }
-      console.log(this.factory._id)
-      console.log(this.title)
       // Socket Edit Event
-      console.log(newFactory)
       socket.emit('editFactory', newFactory)
       // axios put request
       axios.put('/factories/' + this.factory._id, newFactory)
@@ -203,17 +193,12 @@ export default {
   },
   created() {
     let ref = this.$route.params.factory_slug
-    console.log(ref)
-    // mongodb refs
+
     axios.get('/factories/' + ref)
     .then((res) => {
       this.factory = res.data;
-      console.log(`factories ${this.factory._id}`)
-      console.log(res.data);
       this.numbers = this.factory.numbers
-      console.log(`numbers arr ${this.numbers}`)
       this.title = this.factory.title
-      console.log(`title ${this.title}`)
       this.min = this.factory.min
       this.max = this.factory.max
       this.selectedNumber = this.factory.selectedNumber
