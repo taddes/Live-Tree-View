@@ -130,7 +130,7 @@ export default {
         this.titleFeedback = null;
         this.numberFeedback = null;
         // clear numbers array to allow regeneration of numbers, if desired
-        this.numbers = []
+        this.numbers = [];
         for(let i = 0; i < this.selectedNumber; i++) {
           if(this.min > this.max) {
             this.minFeedback = 'Your minimum number cannot be larger than your maximum number'
@@ -175,12 +175,14 @@ export default {
         numbers: this.numbers,
         urlSlug: this.urlSlug
       }
-      // Socket Add Event
-      socket.emit('addFactory', newFactory);
+
       // axios post 
       axios.post('/factories/', newFactory)
       .then((res) => {
-        console.log(`data posted`);
+        // Add unique _id parameter to newFactory object
+        newFactory._id = res.data._id;
+        // Socket Add Event
+        socket.emit('addFactory', newFactory);
       })
       .catch((err) => {
         console.log(err)

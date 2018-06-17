@@ -130,7 +130,7 @@ export default {
         this.titleFeedback = null;
         this.numberFeedback = null;
         // clear numbers array for regeneration of random numbers, if desired
-        this.numbers = []
+        this.numbers = [];
         for(let i = 0; i < this.selectedNumber; i++) {
           if(this.min > this.max) {
             this.minFeedback = 'Your minimum number cannot be larger than your maximum number'
@@ -166,7 +166,7 @@ export default {
       } // close else statement to execute method
     }, // close editFactory method
     updateApi() {
-      submitEnable: false
+      this.submitEnable = false;
       let newFactory = {
         _id: this.factory._id,
         title: this.title,
@@ -175,10 +175,10 @@ export default {
         number: this.number,
         selectedNumber: this.selectedNumber,
         numbers: this.numbers,
-        urlSlug: this.urlSlug
+        urlSlug: this.urlSlug,
+        _id: this.factory._id
       }
-      // Socket Edit Event
-      socket.emit('editFactory', newFactory)
+
       // axios put request
       axios.put('/factories/' + this.factory._id, newFactory)
       .then((res) => {
@@ -188,6 +188,7 @@ export default {
         console.log(err)
       });
       // Socket Edit Event
+      socket.emit('editFactory', newFactory);
 
     }
   },
