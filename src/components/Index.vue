@@ -146,5 +146,31 @@ export default {
   font-family: 'Sunflower', sans-serif;
 }
 
+@media screen and (max-width: 980px) {
+  .index {
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 30px;
+    margin-top: 60px;
+  }
+}
+
+  @media screen and (max-width: 768px) {
+    .index {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+    margin-top: 60px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .index {
+    display:grid;
+    grid-template-columns: 1fr;
+    grid-gap: 30px;
+    margin-top: 60px;
+  }
+}
 
 </style>
