@@ -82,18 +82,19 @@ export default {
       socket.on('addFactory', (newFactory) => {
        this.factories.push(newFactory)
      });
+     
   }, // close mounted lifecycle hook
 
   beforeUpdate() {
-            socket.on('editFactory', (newFactory) => {
-         for(let i = 0; i < this.factories.length; i++) {
-           if(this.factories[i]._id === newFactory._id) {
-              Vue.set(this.factories, i, newFactory)
-              // emulates: this.factories[i] = newFactory
-              // but the Vue.set method required to support bi-directional data binding
-           }
-         }
-      });
+    socket.on('editFactory', (newFactory) => {
+      for(let i = 0; i < this.factories.length; i++) {
+        if(this.factories[i]._id === newFactory._id) {
+          Vue.set(this.factories, i, newFactory)
+          // emulates: this.factories[i] = newFactory
+          // but the Vue.set method required to support bi-directional data binding
+        }
+      }
+    });
 
   } // close beforeUpdate lifecycle hook
 

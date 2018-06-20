@@ -40,19 +40,19 @@ io.on('connection', (socket) => {
   // deleted factory
   socket.on('deleteFactory', (factory) => {
     // Emit this event to all clients connected
-    io.emit('deleteFactory', factory);
+    socket.broadcast.emit('deleteFactory', factory);
   });
 
   // add factory
   socket.on('addFactory', (factory) => {
     // Emit this event to all clients connected
-    io.emit('addFactory', factory);
+    socket.broadcast.emit('addFactory', factory);
   });
 
   // edit factory
   socket.on('editFactory', (factory) => {
     // Emit this event to all clients connected
-    io.emit('editFactory', factory);
+    socket.broadcast.emit('editFactory', factory);
   });
 
   socket.on('disconnect', () => {
