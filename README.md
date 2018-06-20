@@ -4,7 +4,7 @@
 
 Deployed Application: https://tree-vue-number-gen.herokuapp.com/#/
 
-![index](/src/assets/examp.png)
+![index](/src/assets/main.png)
 
 ## Concept
 > The root (Index) of this application allows users to create a factory node which creates random numbers.  A user can specify this factory node to have from 1 to 15 children elements, the range (minimum and maximum number values) of the random numbers (children) and a name for the factory.  Upon generating the random numbers, based on the given parameters, a user can submit this collection and it automatically renders on the client-side page, as well as posts to the MongoDB database.  These factory collections can also easily be modified, regenerated and submitted.  The pages update in real-time through the use of web sockets.
@@ -20,6 +20,15 @@ The application is broken into components in the following structure:
 A Node Express server, with the use of the mongoose npm, allows for the definition of routes and handling server requests.  A MongoDB model is defined and Axios is used to make GET, POST, PUT and DELETE requests. While the random number calculations are handled client-side and rendered to the user, all inputs including the title, min and max numbers, and random numbers are all stored in the database under its own collection with a unique id.
 
 Form input validation is handled through custom validations, with additional validation implemented through Vuelidate, which helps specify input parameters that prevent injection or invalid entires.
+
+
+## Input Example: bi-directional data binding with user input
+
+![index](/src/assets/examp.png)
+
+## Validation Example: secures inputs, bi-directional data binding provides immediate feedback
+
+![index](/src/assets/valid.png)
 
 
 ## Build Setup
