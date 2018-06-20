@@ -86,6 +86,14 @@ export default {
   }, // close mounted lifecycle hook
 
   beforeUpdate() {
+    // Check for database changes prior to render
+    axios.get('/factories')
+    .then((res) => {
+      this.factories = res.data;
+    })
+    .catch((err) => {
+    console.log(err);
+    });
     socket.on('editFactory', (newFactory) => {
       for(let i = 0; i < this.factories.length; i++) {
         if(this.factories[i]._id === newFactory._id) {
