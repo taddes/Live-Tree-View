@@ -4,6 +4,8 @@
 
 Deployed Application: https://tree-vue-number-gen.herokuapp.com/#/
 
+![index](/src/assets/examp.png)
+
 ## Concept
 > The root (Index) of this application allows users to create a factory node which creates random numbers.  A user can specify this factory node to have from 1 to 15 children elements, the range (minimum and maximum number values) of the random numbers (children) and a name for the factory.  Upon generating the random numbers, based on the given parameters, a user can submit this collection and it automatically renders on the client-side page, as well as posts to the MongoDB database.  These factory collections can also easily be modified, regenerated and submitted.  The pages update in real-time through the use of web sockets.
 
