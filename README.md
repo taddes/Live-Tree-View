@@ -1,6 +1,6 @@
 # Tree 'Vue' Number Generator
 
-A Vue.js project implementing mongodb, mongoose, node, node express, socket.io and other technologies to create a persistent, live-updating application with a tree structure. Root(parent) => Factory(child) => grandchild
+>A Vue.js project implementing mongodb, mongoose, node, node express, socket.io and other technologies to create a persistent, live-updating application with a tree structure. Root(parent) => Factory(child) => grandchild
 
 Deployed Application: https://tree-vue-number-gen.herokuapp.com/#/
 
